@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Estudiante extends JFrame{
@@ -17,6 +18,8 @@ public class Estudiante extends JFrame{
     private JList lista;
     private JTextField edadTxt;
     Connection con;
+    PreparedStatement ps;
+    DefaultListModel mod = new DefaultListModel();
 
     public Estudiante() {
         consultarBtn.addActionListener(new ActionListener() {
@@ -29,6 +32,33 @@ public class Estudiante extends JFrame{
         });
     }
 
+    public void listar(){
+        conectar();
+
+    }
+
+    public void insertar() throws SQLException {
+        conectar();
+        ps = con.prepareStatement("INSERT INTO estudiante VALUES (?,?,?,?,?,?)");
+        ps.setInt(1, Integer.parseInt(idText.getText()));
+        ps.setString(2,nombreTxt.getText());
+        ps.setString(3,apellidoText.getText());
+        ps.setInt(4, Integer.parseInt(edadTxt.getText()));
+        ps.setString(5,telefonoTxt.getText());
+        ps.setString(6,carreraTxt.getText());
+        if (ps.executeUpdate()>0){
+            lista.setModel(mod);
+            mod.removeAllElements();
+            mod.addElement("! Registro exitosa !");
+
+            idText.setText("");
+            nombreTxt.setText("");
+            apellidoText.setText("");
+            edadTxt.setText("");
+            telefonoTxt.setText("");
+            carreraTxt.setText("");
+        }
+    }
     public static void main(String[] args) {
         Estudiante f = new Estudiante();
         f.setContentPane(new Estudiante().panel);
