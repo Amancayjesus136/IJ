@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Estudiante extends JFrame{
     private JPanel panel;
@@ -19,6 +16,8 @@ public class Estudiante extends JFrame{
     private JTextField edadTxt;
     Connection con;
     PreparedStatement ps;
+    Statement st;
+    ResultSet r;
     DefaultListModel mod = new DefaultListModel();
 
     public Estudiante() {
@@ -26,15 +25,34 @@ public class Estudiante extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("boton funciona");
-                conectar();
+                try {
+                    listar();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        ingresarBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    insertar();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
 
-    public void listar(){
+    public void listar() throws SQLException {
         conectar();
-
+        lista.setModel(mod);
+        st = con.createStatement();
+        r = st.executeQuery("SELECT idestudiante, nombre, apellido, edad, telefono, carrera from estudiante");
+        mod.removeAllElements();
+        while (r.next()){
+            mod.addElement(r.getString(1)+" "+r.getString(2)+" "+r.getString(3));
+        }
     }
 
     public void insertar() throws SQLException {
