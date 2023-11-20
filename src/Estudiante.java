@@ -20,8 +20,10 @@ public class Estudiante extends JFrame{
 
     public Estudiante() {
         consultarBtn.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("boton funciona");
                 conectar();
             }
         });
@@ -37,9 +39,13 @@ public class Estudiante extends JFrame{
 
     public void conectar() {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/learning", "root", "");
             System.out.println("Conectado");
         } catch (SQLException e) {
+            System.out.println("error: "+ e);
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

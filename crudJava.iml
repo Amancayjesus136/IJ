@@ -20,5 +20,6 @@
     <content url="jar://$USER_HOME$/Desktop/ISMEM/mysql-connector-j-8.2.0.jar!/" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mysql-connector-java-8.0.30" level="project" />
   </component>
 </module>
